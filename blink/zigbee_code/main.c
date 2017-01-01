@@ -1,11 +1,9 @@
 //-----------------------
-// Wireless Communication Homework
+// IoT final project
 // Author List: 
 //joseph(D05921016@ntu.edu.tw), 
-//Wei-Che Chen (r05942110@ntu.edu.tw)
-//Chin yen su (james821007@gmail.com) 
 // Version: 1.0
-// Date: Nov 29,2016
+// Date: Jan 1,2017
 //---------------------
 // Note: 
 // LED Pin  on J3-03
