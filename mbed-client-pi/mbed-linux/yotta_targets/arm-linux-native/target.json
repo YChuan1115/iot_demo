@@ -1,0 +1,37 @@
+{
+  "name": "arm-linux-native",
+  "version": "0.0.1",
+  "inherits": {
+    "linux-native": "^1.0.0"
+  },
+  "similarTo": [
+    "armv7l",
+    "armv6l"
+  ],
+  "description": "Build target for programs compiled natively for Linux with ARM architecture. For example, Raspbian.",
+  "keywords": [
+    "linux",
+    "native"
+  ],
+  "author": "Max Peng <max.peng1768@gmail.com>",
+  "homepage": "https://github.com/maxpeng/target-arm-linux-native",
+  "licenses": [
+    {
+      "url": "https://spdx.org/licenses/Apache-2.0",
+      "type": "Apache-2.0"
+    }
+  ],
+  "debug": [
+    "gdb",
+    "$program"
+  ],
+  "scripts": {
+    "debug": [
+      "gdb",
+      "$program"
+    ],
+    "test": [
+      "$program"
+    ]
+  }
+}

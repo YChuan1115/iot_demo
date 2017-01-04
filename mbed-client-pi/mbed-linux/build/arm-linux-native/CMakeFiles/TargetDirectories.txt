@@ -1,0 +1,17 @@
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/CMakeFiles/all_tests.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client/source/CMakeFiles/mbed-client.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client-c/source/CMakeFiles/mbed-client-c.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client-linux/source/CMakeFiles/mbed-client-linux.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/source/CMakeFiles/mbed-client-linux-example.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client-linux/test/CMakeFiles/mbed-client-linux-test-mbed-client-linux.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client-mbedtls/source/CMakeFiles/mbed-client-mbedtls.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client-mbedtls/test/CMakeFiles/mbed-client-mbedtls-test-mbed-client-mbed-tls.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client/test/CMakeFiles/mbed-client-test-helloworld-mbedclient.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-client/test/CMakeFiles/mbed-client-test-mbedclient_linux.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbed-trace/source/CMakeFiles/mbed-trace.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbedtls/source/CMakeFiles/mbedtls.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbedtls/test/CMakeFiles/mbedtls-test-example-authcrypt.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbedtls/test/CMakeFiles/mbedtls-test-example-benchmark.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbedtls/test/CMakeFiles/mbedtls-test-example-hashing.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/mbedtls/test/CMakeFiles/mbedtls-test-example-selftest.dir
+/root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/ym/nanostack-libservice/source/CMakeFiles/nanostack-libservice.dir

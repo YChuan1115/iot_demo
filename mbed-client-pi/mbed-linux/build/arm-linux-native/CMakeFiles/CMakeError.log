@@ -1,0 +1,39 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/ninja" "cmTryCompileExec1171692739"
+[1/2] Building C object CMakeFiles/cmTryCompileExec1171692739.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTryCompileExec1171692739
+FAILED: : && /usr/bin/cc  -std=c99   CMakeFiles/cmTryCompileExec1171692739.dir/CheckSymbolExists.c.o  -o cmTryCompileExec1171692739  -rdynamic && :
+CMakeFiles/cmTryCompileExec1171692739.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x38): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.
+
+File /root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /root/iot_demo/mbed-client-pi/mbed-linux/build/arm-linux-native/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/ninja" "cmTryCompileExec2287563111"
+[1/2] Building C object CMakeFiles/cmTryCompileExec2287563111.dir/CheckFunctionExists.c.o
+[2/2] Linking C executable cmTryCompileExec2287563111
+FAILED: : && /usr/bin/cc  -std=c99 -DCHECK_FUNCTION_EXISTS=pthread_create   CMakeFiles/cmTryCompileExec2287563111.dir/CheckFunctionExists.c.o  -o cmTryCompileExec2287563111  -rdynamic -lpthreads && :
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+ninja: build stopped: subcommand failed.
+
+
