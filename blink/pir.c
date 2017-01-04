@@ -1,7 +1,6 @@
 /*
-  GPIO_INPUT example For raspberry pi 3
-  WebSite : www.ittraining.com.tw  
-  Programmer: robot@ittraining.com.tw
+  Raspberry pi communicate Zigbee example
+  Programmer: Yi-Fang Chen
 */
 #include <bcm2835.h>
 #include <stdio.h>
@@ -14,10 +13,10 @@
 #define RELAY 27
 #define BUTTON1 24
 #define DIP2 20
+#define BUZZER 16
 
 int main(int argc, char **argv)
 {
-    // If you call this, it will not actually access the GPIO
 
     int dip_value;
 	int btn_value;
@@ -29,6 +28,7 @@ int main(int argc, char **argv)
     bcm2835_gpio_fsel(LED1, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(LED2, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_fsel(RELAY, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_OUTP);
     bcm2835_gpio_fsel(GPIO_INPUT, BCM2835_GPIO_FSEL_INPT);
 	bcm2835_gpio_fsel(BUTTON1, BCM2835_GPIO_FSEL_INPT);
 	bcm2835_gpio_fsel(DIP2, BCM2835_GPIO_FSEL_INPT);
@@ -43,9 +43,9 @@ int main(int argc, char **argv)
 	 gpio_value= bcm2835_gpio_lev(GPIO_INPUT);
 	 //dip_value= bcm2835_gpio_lev(DIP2);
 	 btn_value= bcm2835_gpio_lev(BUTTON1);
-	 printf("read from GPIO_INPUT (Press on): %d\n", gpio_value);	
+	 printf("read BUTTON: %d, GPIO_INPUT(Press on): %d\n",btn_value,gpio_value);	
 	
-	if (gpio_value==1 || btn_value==0) {	
+	if ( btn_value==0) {	
 	// Turn it on
 	bcm2835_gpio_write(LED1, HIGH);
 	bcm2835_gpio_write(LED2, HIGH);
@@ -59,6 +59,9 @@ int main(int argc, char **argv)
      bcm2835_gpio_write(RELAY,LOW);
 
     }
+	
+   bcm2835_gpio_write(BUZZER,gpio_value);
+
 	
 	bcm2835_delay(500);  //500ms
 	}
