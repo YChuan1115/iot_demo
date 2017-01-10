@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>mbed Device Connector Webapp </title>
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/styles.css">
+	
+	<link rel="stylesheet" href="css/industrial.css">
+    <link rel="stylesheet" href="css/introjs.min.css">
+    <link rel="stylesheet" href="css/foundation.css">
+<style>
+	#device_name {
+    color: green;
+	 font-size: 30px;
+	  display: inline;
+     }
+	 
+	 
+	#device_id {
+    color: red;
+	 font-size: 20px;
+	  display: inline;
+	 
+     }
+</style>
+    <!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+    <div class="blueband">
+      <div class="row">
+        <div class="small-12 columns">
+		 <h1>物聯網導論期末專題報告</h1>
+          <h1>基於ARM mbed之雲端家電控制系統</h1>
+        </div>
+      </div>
+    </div>
+    <div id="endpoints">
+    {{#each endpoints}}
+      <div class="row" id="{{name}}">
+        <div class="small-12 columns">
+          <div class="row">
+            <div class="small-12 columns">
+              <p id="device_name">{{type}}</p>&nbsp;&nbsp;&nbsp;&nbsp;<p id="device_id">({{name}})</p>
+            </div>
+          </div>
+	<table style="width:100%">
+	<!--
+	  <tr>
+		<td>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+			  <h4>Humidity: <span class="Humidity-value" style="font-size: 3rem;">0.0</span></span><span style="font-size: 3rem;">%</span></h4>
+			  <label><input type="checkbox" class="subscribe-humidity"> Subscribe</label>
+			  <button class="get-humidity">GET</button>
+			  <div id="humidity">	
+			    <div class="industrial tank size two">
+					<span class="ticks" data-amount="4" data-scale-freq="1">
+					<div class="tick" style="height: 3%; margin-bottom: 330.296%;">
+					<span class="scale">100</span>
+					</div>
+					<div class="tick" style="height: 3%; margin-bottom: 330.296%;">
+					<span class="scale">66</span>
+					</div>
+					<div class="tick" style="height: 3%; margin-bottom: 330.296%;">
+					<span class="scale">33</span>
+					</div>
+					<div class="tick" style="height: 3%; margin-bottom: 330.296%;">
+					<span class="scale">0</span>
+					</div>
+					</span>
+					<div class="space" style="height: 100%;"></div>
+					<div class="meter"></div>
+				</div>
+              </div>
+			</div>
+		</td>
+		<td>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+			  <h4>Temperature: <span class="Temp-value" style="font-size: 3rem;">0.0</span><span style="font-size: 3rem;">&#8451;</span></h4>
+			  <label><input type="checkbox" class="subscribe-temp"> Subscribe</label>
+			  <button class="get-tmp">GET</button>
+			  <div id="thermal">	
+			   <div class="industrial thermometer size two">
+				<span class="ticks" data-amount="10">
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				<div class="tick" style="height: 3%; margin-bottom: 100%;"></div>
+				</span>				
+				<div class="space" style="height: 100%;"></div>
+				<div class="meter safe"></div>
+				</div>
+              </div>
+			</div>
+		</td>
+		</tr>
+		-->
+		<tr>
+		<!--
+		<td>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+			  <h4>Pressure: <span class="Pressure-value" style="font-size: 3rem;">0.0</span></span><span style="font-size: 3rem;">hp</span></h4>
+			  <label><input type="checkbox" class="subscribe-pressure"> Subscribe</label>
+			  <button class="get-pressure">GET</button>
+			  	<div id="pressurefig">
+				<div class="industrial gauge size two">
+					<span class="ticks" data-amount="8" data-scale-freq="1">
+						<div class="tick" style="width: 2.5%;"></div>
+						<div class="tick" style="width: 2.5%; top: -100%; transform: rotate(-70deg);">
+						<span class="scale">950</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -200%; transform: rotate(-50deg);">
+						<span class="scale">975</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -300%; transform: rotate(-30deg);">
+						<span class="scale">1000</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -400%; transform: rotate(-10deg);">
+						<span class="scale">1025</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -500%; transform: rotate(10deg);">
+						<span class="scale">1050</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -600%; transform: rotate(30deg);">
+						<span class="scale">1075</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -700%; transform: rotate(50deg);">
+						<span class="scale">1100</span>
+						</div>
+						<div class="tick" style="width: 2.5%; top: -800%; transform: rotate(70deg);">
+						<span class="scale">1125</span>
+						</div>
+					</span>
+					<div class="space"></div>
+					<div class="meter" style="transform: rotate(70deg);"></div>
+					</div>
+                </div>
+			</div>
+		</td>
+	 	  -->
+		<td>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+			  <h2>GPIO-STATE:</h2>
+			  <label><input type="checkbox" class="subscribe-gpio"> Subscribe</label>  <button class="get-gpio-state">GET</button> <br>
+			 <span class="G-STA-value" style="font-size: 1.5rem;">Unknown GPIO State</span>
+			
+			
+			</div>
+		</td>
+	  </tr>
+	<!-- 
+	  <tr>
+		<td>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+				<h4>POST Command Line</h4>
+				<select class="gpio">
+					 <option value="12/1">LED4 ON</option>
+					 <option value="12/0">LED4 OFF</option>
+         			 <option value="16/1">BUZZER ON</option>
+					 <option value="16/0">BUZZER OFF</option>
+ 		 			 <option value="27/1">Relay ON</option>		
+					 <option value="27/0">Relay OFF</option>
+			 
+				</select>
+			</div>
+		</td>
+			
+		<td>
+			<div class="small-12 medium-6 columns">
+				<button class="blink">POST</button>
+			</div>
+		</td>
+	  </tr>
+
+	  	  <tr>
+		<td>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+				<h4>Control Zigbee Module </h4>
+				<select class="zigbee">
+ 		 			 <option value="relay=on">Relay ON</option>		
+					 <option value="relay=off">Relay OFF</option>
+			 
+				</select>
+			</div>
+		</td>
+		<td>
+			<div class="small-12 medium-6 columns">
+				<button class="zigbee-button">POST</button>
+			</div>
+		</td>
+	  </tr>
+	  -->
+	   <tr>
+		<td>
+		   <h2>Control Zigbee Module </h2>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+			<button class="btn_relay_on" >Turn on the light</button>
+			<img id="myImage" src="img/pic_bulboff.gif" style="width:100px">
+			<button class="btn_relay_off" >Turn off the light</button>
+			</div>
+		</td>
+				<td>
+		   <h2>Switch </h2>
+			<div class="small-12 medium-6 columns" style="width: 100%;">
+			<img id="switch_status" src="img/switch_off.png" style="width:100px">
+		
+			</div>
+		</td>
+	  </tr>
+	  
+	</table>
+	  </div>
+	  </div>
+    {{else}}
+      <div class="small-12 columns">
+        <div class="row">
+          <div class="small-12 columns">
+            <h2>No endpoints connected</h2>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+    </div>
+
+
+    <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="js/socket.io.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        var socket = io();
+
+        $('#endpoints').children().each(function(index, element) {
+          var _this = $(this);
+          _this.find('.subscribe-humidity').change(function() {
+            if ($(this).is(":checked")) {
+              _this.find('.get-humidity').prop('disabled', true);
+              socket.emit('subscribe-to-Humidity', {
+                endpointName: _this.attr('id')
+              });
+            } else {
+              _this.find('.get-humidity').prop('disabled', false);
+              socket.emit('unsubscribe-to-hum', {
+                endpointName: _this.attr('id')
+              });
+            }
+          });
+		  
+		  _this.find('.subscribe-pressure').change(function() {
+            if ($(this).is(":checked")) {
+              _this.find('.get-pressure').prop('disabled', true);
+              socket.emit('subscribe-to-Pressure', {
+                endpointName: _this.attr('id')
+              });
+            } else {
+              _this.find('.get-pressure').prop('disabled', false);
+              socket.emit('unsubscribe-to-pres', {
+                endpointName: _this.attr('id')
+              });
+            }
+          });
+		  
+		  _this.find('.subscribe-temp').change(function() {
+            if ($(this).is(":checked")) {
+
+              _this.find('.get-tmp').prop('disabled', true);
+              socket.emit('subscribe-to-tmp', {
+                endpointName: _this.attr('id')
+              });
+            } else {
+              _this.find('.get-tmp').prop('disabled', false);
+              socket.emit('unsubscribe-to-tmp', {
+                endpointName: _this.attr('id')
+              });
+            }
+          });
+		  
+		  _this.find('.subscribe-gpio').change(function() {
+            if ($(this).is(":checked")) {
+			  console.log("sub gpio");
+              _this.find('.get-gpio-state').prop('disabled', true);
+              socket.emit('subscribe-gpio-state', {
+                endpointName: _this.attr('id')
+              });
+            } else {
+              _this.find('.get-gpio-state').prop('disabled', false);
+              socket.emit('unsubscribe-gpio-state', {
+                endpointName: _this.attr('id')
+              });
+            }
+          });
+
+          _this.find('.get-humidity').on('click', function() {
+            socket.emit('get-humidity', {
+              endpointName: _this.attr('id')
+            });
+          });
+		  
+		  _this.find('.get-tmp').on('click', function() {
+            socket.emit('get-tmp', {
+              endpointName: _this.attr('id')
+            });
+          });
+		  
+		  _this.find('.get-pressure').on('click', function() {
+            socket.emit('get-pressure', {
+              endpointName: _this.attr('id')
+            });
+          });
+		  
+		  _this.find('.get-gpio-state').on('click', function() {
+            socket.emit('get-gpio-state', {
+              endpointName: _this.attr('id')
+            });
+          });
+
+
+		  
+		    _this.find('.gpio').bind('input', function() {
+            _this.find('.blink').addClass('active');
+          })
+
+          _this.find('.blink').on('click', function() {
+            socket.emit('post-gpio-state', {
+              endpointName: _this.attr('id'),
+			  myvalue: _this.find('.gpio').val()
+            });
+          });
+		  
+		  
+		 _this.find('.zigbee-button').on('click', function() {
+            socket.emit('post-zigbee', {
+              endpointName: _this.attr('id'),
+			  myvalue: _this.find('.zigbee').val()
+            });
+          });
+		  
+		  
+		  //relay on button
+		  
+		  _this.find('.btn_relay_on').on('click', function() {
+            socket.emit('post-zigbee', {
+              endpointName: _this.attr('id'),
+			  myvalue: "relay=on"
+            });
+          });
+		  
+		  		  
+		  _this.find('.btn_relay_off').on('click', function() {
+            socket.emit('post-zigbee', {
+              endpointName: _this.attr('id'),
+			  myvalue: "relay=off"
+            });
+          });
+		  
+		  
+        });
+		
+
+
+
+        socket.on('Hum', function (data) {
+          console.log('Hum', data);
+          $('#' + data.endpointName + ' .Humidity-value').html(data.value);
+		  var hum;
+		  hu = JSON.parse(data.value);
+		  hum = "height: "+ (100-hu) +"%;";
+		  $('#' + data.endpointName + ' #humidity' + ' .space').attr("style",hum);
+        });
+		
+		
+        socket.on('Pressure', function (data) {
+          console.log('Pressure', data);
+          $('#' + data.endpointName + ' .Pressure-value').html(data.value);
+		  var hpa;
+		  hp = JSON.parse(data.value);
+		  hpa = "transform: rotate" + "(" + (((hp-950)*140/175)-70) + "deg); ";
+		  $('#' + data.endpointName + ' #pressurefig' + ' .meter').attr("style",hpa);
+        });
+		
+		
+        socket.on('Temp', function (data) {
+          console.log('Temp', data);
+          $('#' + data.endpointName + ' .Temp-value').html(data.value);		  
+		  var text;
+		  obj = JSON.parse(data.value);		  
+//		  formula for thermal --> 100-(obj-minimumValue)*100/range
+		  text = "height: "+(100-(obj-20)*100/15)+"%;";
+		  $('#' + data.endpointName + ' #thermal' + ' .space').attr("style",text);
+        });
+		
+		socket.on('GPIO-STATE', function (data) {
+          console.log('GPIO-STATE', data);
+		  var text;
+		  obj = JSON.parse(data.value);
+	//	  document.getElementById("demo").innerHTML = "GPIO:"+obj.GPIO_STATUS[1].GPIO+ ",  Status: " +obj.GPIO_STATUS[1].value+"<br>";
+	//  document.getElementById("demo1").innerHTML = "GPIO:"+obj.GPIO_STATUS[0].GPIO+ ",  Status: " +obj.GPIO_STATUS[0].value+"<br>";
+		         text="Switch--->"+obj.GPIO_STATUS[0].GPIO+ ",Status: " +obj.GPIO_STATUS[0].value+"<br>";
+		  console.log(text);
+		  text=text + "Buzzer--->"+obj.GPIO_STATUS[1].GPIO+ ",Status: " +obj.GPIO_STATUS[1].value+"<br>";
+		  text=text + "Relay----->"+obj.GPIO_STATUS[2].GPIO+ ",Status: " +obj.GPIO_STATUS[2].value+"<br>";
+		  text=text + "Button1-->"+obj.GPIO_STATUS[3].GPIO+ ",Status: " +obj.GPIO_STATUS[3].value+"<br>";
+		  text=text + "Button2-->"+obj.GPIO_STATUS[4].GPIO+ ",Status: " +obj.GPIO_STATUS[4].value+"<br>";
+		  text=text + "LED4----->"+obj.GPIO_STATUS[5].GPIO+ ",Status: " +obj.GPIO_STATUS[5].value+"<br>";
+		  console.log(text);
+		
+          $('#' + data.endpointName + ' .G-STA-value').html(text);
+		  
+		  if (obj.GPIO_STATUS[2].value==0)
+		      document.getElementById('myImage').src='img/pic_bulboff.gif';
+	     else 		  
+			 document.getElementById('myImage').src='img/pic_bulbon.gif'
+		  
+		  
+		 if (obj.GPIO_STATUS[0].value==0)
+		      document.getElementById('switch_status').src='img/switch_off.png';
+	     else 		  
+			 document.getElementById('switch_status').src='img/switch_on.png'
+		  
+        });
+
+        socket.on('subscribed-to-Humidity', function (data) {
+          console.log('subscribed-to-Humidity', data);
+        });
+		
+		socket.on('subscribe-to-Pressure', function (data) {
+          console.log('subscribed-to-Pressure', data);
+        });
+
+		socket.on('subscribe-to-tmp', function (data) {
+          console.log('subscribed-to-tmp', data);
+        });
+		
+		socket.on('subscribe-gpio-state', function (data) {
+          console.log('subscribed-gpio-state', data);
+        });
+
+
+        socket.on('unsubscribed-to-presses', function (data) {
+          console.log('unsubscribed-to-presses', data);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+mbed Device Connector Quickstart listening at http://localhost:8080
+endpoints name>9e5da23c-c029-4f39-8b91-241dc5dfa6c3
+endpoints type>Raspberry pi-ittraining
+endpoints name>270e4338-5b15-48b4-86af-0d17da2c321b
+endpoints type>Hank
+endpoints-->[object Object],[object Object]
+subscribe-to-tmp
+putResourceSubscription sub tmp in app.js
+notification.path:/Monitor/0/Hum
+notification.path:/Monitor/0/D
+notification.path:/Monitor/0/Hum
+subscribe-to-tmp
+notification.path:/Monitor/0/Hum
+putResourceSubscription sub tmp in app.js
+notification.path:/Monitor/0/Hum
+notification.path:/Monitor/0/Hum
+notification.path:/Monitor/0/Hp
+notification.path:/Monitor/0/Hum
+subscribe-gpio-state
+notification.path:/Monitor/0/D
+notification.path:/Monitor/0/Hp
+notification.path:/Monitor/0/Hum
+putResourceSubscription sub gpio in app.js
+notification.path:/Monitor/0/Hp
+notification.path:/Monitor/0/Hum
+notification.path:/Monitor/0/Hp
+notification.path:/Monitor/0/Hum
+notification.path:/Monitor/0/Hp
+notification.path:/Monitor/0/Hum
+notification.path:/Monitor/0/D
+notification.path:/Monitor/0/Hp
+notification.path:/Monitor/0/Hum
+endpoints name>9e5da23c-c029-4f39-8b91-241dc5dfa6c3
+endpoints type>Raspberry pi-ittraining
+endpoints name>270e4338-5b15-48b4-86af-0d17da2c321b
+endpoints type>Hank
+endpoints-->[object Object],[object Object]
+get-temp in app.js
+getResourceValue : Temperature called
+endpoints name>9e5da23c-c029-4f39-8b91-241dc5dfa6c3
+endpoints type>Raspberry pi-ittraining
+endpoints name>270e4338-5b15-48b4-86af-0d17da2c321b
+endpoints type>Hank
+endpoints-->[object Object],[object Object]
+subscribe-to-tmp
+putResourceSubscription sub tmp in app.js
+subscribe-gpio-state
+putResourceSubscription sub gpio in app.js
+endpoints name>9e5da23c-c029-4f39-8b91-241dc5dfa6c3
+endpoints type>Raspberry pi-ittraining
+endpoints name>270e4338-5b15-48b4-86af-0d17da2c321b
+endpoints type>Hank
+endpoints-->[object Object],[object Object]
+endpoints name>9e5da23c-c029-4f39-8b91-241dc5dfa6c3
+endpoints type>Raspberry pi-ittraining
+endpoints name>270e4338-5b15-48b4-86af-0d17da2c321b
+endpoints type>Hank
+endpoints-->[object Object],[object Object]
+subscribe-to-tmp
+putResourceSubscription sub tmp in app.js
+get-temp in app.js
+getResourceValue : Temperature called
+subscribe-to-tmp
+putResourceSubscription sub tmp in app.js
+get-temp in app.js
+subscribe-to-tmp
+getResourceValue : Temperature called
+putResourceSubscription sub tmp in app.js
+get-temp in app.js
+subscribe-to-tmp
+getResourceValue : Temperature called
+putResourceSubscription sub tmp in app.js
+get-gpio in app.js
+getResourceValue:get-gpio in app.js
+subscribe-gpio-state
+putResourceSubscription sub gpio in app.js
+endpoints name>9e5da23c-c029-4f39-8b91-241dc5dfa6c3
+endpoints type>Raspberry pi-ittraining
+endpoints name>270e4338-5b15-48b4-86af-0d17da2c321b
+endpoints type>Hank
+endpoints-->[object Object],[object Object]
+get-temp in app.js
+getResourceValue : Temperature called
+get-temp in app.js
+getResourceValue : Temperature called
+subscribe-to-tmp
+putResourceSubscription sub tmp in app.js
+get-temp in app.js
+getResourceValue : Temperature called
+subscribe-to-tmp
+putResourceSubscription sub tmp in app.js
+get-temp in app.js
+get-temp in app.js
+get-temp in app.js
+get-temp in app.js
+getResourceValue : Temperature called
+/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/app.js:203
+      if (error) throw error;
+                 ^
+
+Error: Request failed: [Status 429] CoAP Congestion control: transaction for this node already ongoing. [/122.146.92.242:65181]
+
+
+    at Object.Utility.handleError (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/utility.js:62:13)
+    at Object.Utility.handleAsyncError (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/utility.js:46:8)
+    at EventEmitter.mbedConnectorApi.asyncResponseHandler (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/notifications.js:252:15)
+    at /home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/notifications.js:338:13
+    at Array.forEach (native)
+    at EventEmitter.mbedConnectorApi.handleNotifications (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/notifications.js:337:32)
+    at poll (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/notifications.js:181:15)
+    at EventEmitter.mbedConnectorApi.longPollRequestCallback (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/notifications.js:241:9)
+    at Request._callback (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/lib/common.js:95:21)
+    at Request.self.callback (/home/joseph/mymbed/trunk/git/mbed-connector-api-node-quickstart/node_modules/mbed-connector-api/node_modules/request/request.js:200:22)
