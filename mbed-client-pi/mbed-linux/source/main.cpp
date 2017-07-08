@@ -215,36 +215,6 @@ public:
 	
 	
 		
-    void execute_zigbee_function(void *argument) {
-        if(argument) {  //fetch the payload of the POST
-            M2MResource::M2MExecuteParameter* param = (M2MResource::M2MExecuteParameter*)argument;
-            String object_name = param->get_argument_object_name();
-            uint16_t object_instance_id = param->get_argument_object_instance_id();
-            String resource_name = param->get_argument_resource_name();
-            int payload_length = param->get_argument_value_length();
-            uint8_t* payload = param->get_argument_value();
-            printf("Resource: %s/%d/%s executed\n", object_name.c_str(), object_instance_id, resource_name.c_str());
-            printf("Payload: %.*s\n", payload_length, payload);
-			sprintf(postOnOLED, "%s/%d/%s:%s", object_name.c_str(), object_instance_id, resource_name.c_str(), payload);
-			
-			char cmd[20] = {0};
-			int  pin, arg;
-			char *set_pin = NULL, *value = NULL;
-			sprintf(cmd, "%s", payload);
-			printf("%s\n",cmd);
-			if (strcasecmp(cmd,"relay=on")==0) {
-				bcm2835_gpio_fsel(BUTTON1, BCM2835_GPIO_FSEL_OUTP);
-				bcm2835_gpio_write(BUTTON1,0); //pressed 
-				
-			} else {
-				bcm2835_gpio_fsel(BUTTON1, BCM2835_GPIO_FSEL_OUTP);
-				bcm2835_gpio_write(BUTTON1,1); //pressed 
-			} 
-				
-				
-			
-        }
-    }
 	
 	
     void execute_function_gpio(void *argument) {
@@ -381,11 +351,7 @@ public:
                                  (const uint32_t)sizehp);
 				 //for dynamic "resource" itself, we can set the execution callback whenever mDS send the POST request to us
                    reshp->set_execute_function(execute_callback(this,&MbedClient::execute_function));
-              /*  inst->create_static_resource("S",
-                                             "ResourceTest",
-                                             M2MResourceInstance::STRING,
-                                             STATIC_VALUE,
-                                             sizeof(STATIC_VALUE)-1);*/
+              
               M2MResource* resh = inst->create_dynamic_resource("Hum",
                                                                "ResourceTest",
                                                                 M2MResourceInstance::FLOAT,
@@ -401,11 +367,6 @@ public:
                                  (const uint32_t)sizeh);
 				 //for dynamic "resource" itself, we can set the execution callback whenever mDS send the POST request to us
                    resh->set_execute_function(execute_callback(this,&MbedClient::execute_function));
-              /*  inst->create_static_resource("S",
-                                             "ResourceTest",
-                                             M2MResourceInstance::STRING,
-                                             STATIC_VALUE,
-                                             sizeof(STATIC_VALUE)-1);*/
             }
         }
         return success;
@@ -462,44 +423,14 @@ public:
                                                                  M2MResourceInstance::INTEGER,
                                                                  true);
 														 
-                char buffer_button23[20];
-                int size23 = sprintf(buffer_button23,"Button Count2 = %d", b23);																								
-                printf("%s\n",buffer_button23);
-				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
+			//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
                   gpio_23->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  gpio_23->set_value((const uint8_t*)buffer_button23,
-                                       (const uint32_t)size23);
 									   
 				//-------------Resource path: GPIO/1/Button2---------------------	
 				 M2MResource* gpio_24 = inst_gpio_2->create_dynamic_resource("Button2",
                                                                  "GPIOSTATE",
                                                                  M2MResourceInstance::INTEGER,
                                                                  true);
-                char buffer_button24[20];
-                int size24 = sprintf(buffer_button24,"Button Count2 = %d", b24);																								
-                printf("%s\n",buffer_button24);
-				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
-                  gpio_24->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  gpio_24->set_value((const uint8_t*)buffer_button24,
-                                       (const uint32_t)size24);
-			//-------------Resource path: GPIO/1/Zigbee---------------------	
-			   {
-				 M2MResource* gpio_24 = inst_gpio_2->create_dynamic_resource("Zigbee",
-                                                                 "GPIOSTATE",
-                                                                 M2MResourceInstance::INTEGER,
-                                                                 true);
-                char buffer_button24[40];
-                int size24 = sprintf(buffer_button24,"Button 1=%d,Switch State=%d",bcm2835_gpio_lev(BUTTON1),bcm2835_gpio_lev(GPIO_INPUT));																								
-                printf("%s\n",buffer_button24);
-				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
-                  gpio_24->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  gpio_24->set_value((const uint8_t*)buffer_button24,
-                                       (const uint32_t)size24);		
-                  gpio_24->set_execute_function(execute_callback(this,&MbedClient::execute_zigbee_function));									   
-			   }					   
 									   
 			}                             
 		
@@ -640,18 +571,6 @@ public:
                 gpio_24->set_value((const uint8_t*)buffer_button24,
                                        (const uint32_t)size24);
 			//---------update  GPIO/1/Zigbee---------------------	
-			   {
-				M2MResource* gpio_24 = inst_gpio->resource("Zigbee");
-				
-                char buffer_button24[40];
-				int on=bcm2835_gpio_lev(GPIO_INPUT);
-                int size24 = sprintf(buffer_button24,"Button 1=%d,Switch State=%d",bcm2835_gpio_lev(BUTTON1),on);																								
-                printf("%s\n",buffer_button24);				         													
-                gpio_24->set_value((const uint8_t*)buffer_button24,
-                                       (const uint32_t)size24);
-				bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_OUTP);					   
-				 bcm2835_gpio_write(BUZZER,on);				   
-			   }
 			}                      
 		
 		}
