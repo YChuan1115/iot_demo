@@ -66,8 +66,8 @@
 
 #define LCD_I2C_SLA   0x3c
 
-#define i2c_trigger 0
-
+#define OLED 0
+#define BME280 0
 
 
 //create M2M socket
@@ -80,10 +80,10 @@ const String &ENDPOINT_NAME = MBED_ENDPOINT_NAME;
 //create resource
 // This is address to mbed Device Connector
 const String &MBED_SERVER_ADDRESS = "coap://api.connector.mbed.com:5684";
-const String &MANUFACTURER = "manufacturer";
+const String &MANUFACTURER = "ittraining";
 const String &TYPE = "type";
-const String &MODEL_NUMBER = "2015";
-const String &SERIAL_NUMBER = "12345";
+const String &MODEL_NUMBER = "IOT_2017";
+const String &SERIAL_NUMBER = "23167736";
 
 const uint8_t value[] = "MyValue";
 const uint8_t STATIC_VALUE[] = "Static value";
@@ -106,7 +106,6 @@ unsigned int buzzctl = 0;
 char postOnOLED[20] = {0};
 
 struct bme280_t *mbedbme;
-
 
 class MbedClient: public M2MInterfaceObserver {
 public:
@@ -290,7 +289,7 @@ public:
         }
     }
 	
-#if i2c_trigger	
+#if OLED==1	
 
 	void execute_function(void *argument) {
         if(argument) {  //fetch the payload of the POST
@@ -306,66 +305,39 @@ public:
 					
         }
     }
+
+#endif
+
+#if BME280==1
 //Here to change the resources
     bool create_generic_object() {
         bool success = false;
-        _object = M2MInterfaceFactory::create_object("Monitor");
+        _object = M2MInterfaceFactory::create_object("Sensor");
         if(_object) {
             M2MObjectInstance* inst = _object->create_object_instance();
             if(inst) {
                 inst->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
                 inst->set_register_uri(true);
-                M2MResource* res = inst->create_dynamic_resource("D",
+                M2MResource* res = inst->create_dynamic_resource("Temp",
                                                                  "ResourceTest",
                                                                  M2MResourceInstance::FLOAT,
                                                                  true);
-                char buffer[20];
-                 bme280_force_read_measurement(mbedbme);
-                int size = sprintf(buffer,"%6.2f", bme280_get_temperature_most_accurate(mbedbme));
-                  printf("Temp: %s\n",buffer);
-				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
-                  res->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  res->set_value((const uint8_t*)buffer,
-                                 (const uint32_t)size);
-				 //for dynamic "resource" itself, we can set the execution callback whenever mDS send the POST request to us
-                   res->set_execute_function(execute_callback(this,&MbedClient::execute_function));
-              /*  inst->create_static_resource("S",
-                                             "ResourceTest",
-                                             M2MResourceInstance::STRING,
-                                             STATIC_VALUE,
-                                             sizeof(STATIC_VALUE)-1);*/
+              res->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
+              res->set_execute_function(execute_callback(this,&MbedClient::execute_function));
                                              
               M2MResource* reshp = inst->create_dynamic_resource("Hp",
                                                                "ResourceTest",
                                                                 M2MResourceInstance::FLOAT,
                                                                 true);
-                char bufferhp[20];
-                bme280_force_read_measurement(mbedbme);
-                int sizehp = sprintf(bufferhp,"%6.2f", bme280_get_pressure(mbedbme));
-                  printf("Pressure: %s\n",bufferhp);
 				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
-                  reshp->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  reshp->set_value((const uint8_t*)bufferhp,
-                                 (const uint32_t)sizehp);
-				 //for dynamic "resource" itself, we can set the execution callback whenever mDS send the POST request to us
-                   reshp->set_execute_function(execute_callback(this,&MbedClient::execute_function));
+               reshp->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
+               reshp->set_execute_function(execute_callback(this,&MbedClient::execute_function));
               
               M2MResource* resh = inst->create_dynamic_resource("Hum",
                                                                "ResourceTest",
                                                                 M2MResourceInstance::FLOAT,
                                                                 true);
-                char bufferh[20];
-                bme280_force_read_measurement(mbedbme);
-                int sizeh = sprintf(bufferh,"%6.2f", bme280_get_humidity_most_accurate(mbedbme));
-                printf("Humidity: %s\n",bufferh);
-				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
                   resh->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  resh->set_value((const uint8_t*)bufferh,
-                                 (const uint32_t)sizeh);
-				 //for dynamic "resource" itself, we can set the execution callback whenever mDS send the POST request to us
                    resh->set_execute_function(execute_callback(this,&MbedClient::execute_function));
             }
         }
@@ -390,27 +362,9 @@ public:
                                                                  "GPIOSTATE",
                                                                  M2MResourceInstance::STRING,
                                                                   true);
-																  
-																    
-                char buffer_state[256];
-				int state_state = 0;
-                int size_state = sprintf(buffer_state,"{\"GPIO_STATUS\":[{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d}]}",
-													  GPIO_INPUT,bcm2835_gpio_lev(GPIO_INPUT),
-													  BUZZER,buzzctl,
-													  RELAY,bcm2835_gpio_lev(RELAY),
-													  BUTTON1,bcm2835_gpio_lev(BUTTON1),
-													  BUTTON2,bcm2835_gpio_lev(BUTTON2),
-													  LED4,bcm2835_gpio_lev(LED4)
-													  );																							
-                  printf("%s\n",buffer_state);
-				  
-				  
 				  
 				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
                   gpio_state->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-				  // send GET command to mDS server
-                  gpio_state->set_value((const uint8_t*)buffer_state,
-                                       (const uint32_t)size_state);
 				 //for dynamic "resource" itself, we can set the execution callback whenever mDS send the POST request to us
                    gpio_state->set_execute_function(execute_callback(this,&MbedClient::execute_function_gpio));
 				   
@@ -441,16 +395,16 @@ public:
 	
     void update_resource() {
 
-#if i2c_trigger
+#if BME280==1
         if(_object) {
             M2MObjectInstance* inst = _object->object_instance();
             if(inst) {
-                M2MResource* res = inst->resource("D");
+                M2MResource* res = inst->resource("Temp");
                            
                 char buffer[20]={0};
                 bme280_force_read_measurement(mbedbme);
                 int size = sprintf(buffer,"%6.2f",bme280_get_temperature_most_accurate(mbedbme));
-                printf("%s",buffer);
+                printf("%s\n",buffer);
                 //res->set_value() means send resource to mDS by GET requesst 
            
                 res->set_value((const uint8_t*)buffer,
@@ -461,7 +415,7 @@ public:
                 char bufferhp[20]={0};
                 bme280_force_read_measurement(mbedbme);
                 int sizehp = sprintf(bufferhp,"%6.2f",bme280_get_pressure(mbedbme));
-                printf("%s",bufferhp);
+                printf("%s\n",bufferhp);
                 //res->set_value() means send resource to mDS by GET requesst 
                 
                 reshp->set_value((const uint8_t*)bufferhp,
@@ -472,7 +426,7 @@ public:
                 char bufferh[20]={0};
                 bme280_force_read_measurement(mbedbme);
                 int sizeh = sprintf(bufferh,"%6.2f",bme280_get_humidity_most_accurate(mbedbme));
-                printf("%s",bufferh);
+                printf("%s\n",bufferh);
                 //res->set_value() means send resource to mDS by GET requesst 
               
                 resh->set_value((const uint8_t*)bufferh,
@@ -570,7 +524,6 @@ public:
                 printf("%s\n",buffer_button24);																							
                 gpio_24->set_value((const uint8_t*)buffer_button24,
                                        (const uint32_t)size24);
-			//---------update  GPIO/1/Zigbee---------------------	
 			}                      
 		
 		}
@@ -578,9 +531,10 @@ public:
 
     void register_endpoint(){
         M2MObjectList object_list;
+   
         object_list.push_back(_device);
 		 printf("%s called 1\n",__func__);
-#if i2c_trigger        
+#if BME280==1       
 		object_list.push_back(_object);
 #endif
         printf("%s called 2\n",__func__);
@@ -611,10 +565,10 @@ public:
         }
     }
 
-    void bootstrap_done(M2MSecurity */*server_object*/){
+    void bootstrap_done(M2MSecurity * /*server_object*/){
     }
     // callback function when register successfully
-    void object_registered(M2MSecurity */*security_object*/, const M2MServer &/*server_object*/){
+    void object_registered(M2MSecurity * /*security_object*/, const M2MServer &/*server_object*/){
         _registered = true;
         printf("\nRegistered\n");
 		clear_LCD();
@@ -622,12 +576,12 @@ public:
 		print_Line(3, postOnOLED);
     }
     // callback function when unregister successfully
-    void object_unregistered(M2MSecurity */*server_object*/){
+    void object_unregistered(M2MSecurity * /*server_object*/){
         _unregistered = true;
         printf("\nUnregistered\n");
     }
     // callback function when update registration information successfully
-    void registration_updated(M2MSecurity */*security_object*/, const M2MServer & /*server_object*/){
+    void registration_updated(M2MSecurity * /*security_object*/, const M2MServer & /*server_object*/){
         _registration_updated = true;
         printf("\nregistration updated\n");
 
@@ -855,13 +809,13 @@ int main() {
     //-- init the bcm2835 library
     bcm2835_init();
 	
-#if i2c_trigger	
+#if OLED==1
 	
     i2c_start();
 	Init_LCD();
     clear_LCD();
     //-- new a bme280 device module with i2c_addr
-
+#if BME280==1
     mbedbme = bme280_new(BME280_ADDR);   
 	if(mbedbme == 0) return -1;
     bme280_initi(mbedbme);
@@ -888,12 +842,13 @@ int main() {
 	}
 	
 	}
+#endif
 	
 #endif	
 	gpio_init();
 	
 	printf("\n................Start mbed client .........................\n");
-#if i2c_trigger	
+#if OLED==1	
 	clear_LCD();
 	print_Line(0, ".............");
 	print_Line(1, "-Registering-");
@@ -906,7 +861,7 @@ int main() {
     bool result = mbed_client.create_interface();  //crere socket of endpoint
     if(true == result) {
         printf("\nInterface created\n");
-#if i2c_trigger
+#if OLED==1
         print_Line(3,"InterfaceCreated");
 #endif
     }
@@ -919,7 +874,7 @@ int main() {
     if(true == result){
         printf("\nDevice object created !!\n");
     }
-#if i2c_trigger
+#if BME280==1
     result = mbed_client.create_generic_object(); //create /object/object instance/resource
 
     if(true == result) {
@@ -929,12 +884,12 @@ int main() {
 	result = mbed_client.create_generic_object_gpio(); //create /object/object instance/resource
 
     if(true == result) {
-        printf("\nGeneric object created\n");
+        printf("\nGeneric GPIO object created\n");
     }
 
 	
     printf("Registering endpoint!!\n");
-#if i2c_trigger	
+#if OLED==1	
 	clear_LCD();
 	strcpy(postOnOLED, "..Registering..");
 	print_Line(3, postOnOLED);
@@ -952,8 +907,7 @@ int main() {
 
     while(loop);
 	
-    bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_INPT);
-#if i2c_trigger
+#if OLED==1
     bme280_write_mode(mbedbme,BME280_MODE_SLEEP);
     bme280_free(mbedbme);
 	sleep(1);
@@ -972,4 +926,5 @@ int main() {
 	
     return 0;
 }
+			//---------update  GPIO/1/Zigbee---------------------	
 
