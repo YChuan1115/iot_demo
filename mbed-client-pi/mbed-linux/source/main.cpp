@@ -38,7 +38,7 @@
 
 //---Raspberry pi shield 3---------
 // Added by joseph , Jan 1, 2017
-// from blog.ittraining.com.tw
+// based on the IT Pi 3 Shield: http://blog.ittraining.com.tw/2016/10/raspberry-pi-io-shield-v30.html 
 #define LED0 5
 #define LED1 6
 #define LED2 13
@@ -50,12 +50,11 @@
 #define PWM1 19
 #define IR_TX 25
 #define IR_RX 17
-#define DIP1 20
 #define DIP2 21
+#define DIP1 20
 #define BUTTON1 24
 #define BUTTON2 23
 #define BUZZER 16
-#define GPIO_INPUT 26
 //---------------------------------
 #include "oled_i2c/include/my_debug.h"
 #include "oled_i2c/include/I2C_SSD1306Z.h"	
@@ -66,8 +65,8 @@
 
 #define LCD_I2C_SLA   0x3c
 
-#define OLED 0
-#define BME280 0
+#define OLED 1
+#define BME280 1
 
 
 //create M2M socket
@@ -101,6 +100,8 @@ int b23 = 0, b24 = 0;
 unsigned int earseOLED = 0;
 unsigned int overflowOLED = 0;
 unsigned int buzzctl = 0; 
+
+unsigned char pi_gpio_state[40]={0};
  
 //buffer stores information of post request
 char postOnOLED[20] = {0};
@@ -248,65 +249,15 @@ public:
 					else{
 						pin = atoi(set_pin);
 						arg = atoi(value);
-						switch(pin){
-							
-							case BUTTON1:
-								bcm2835_gpio_fsel(BUTTON1, BCM2835_GPIO_FSEL_OUTP);
-								bcm2835_gpio_write(BUTTON1, arg);
-								break;
-							case LED4:
-								bcm2835_gpio_fsel(LED4, BCM2835_GPIO_FSEL_OUTP);
-								bcm2835_gpio_write(LED4, arg);
-								break;
-							case BUZZER:
-								if(arg >= 1){						
-									bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_OUTP);
-									bcm2835_gpio_write(BUZZER, 1);
-									buzzctl = 1;
-								}else if(arg == 0){
-									bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_OUTP);
-									bcm2835_gpio_write(BUZZER, 0);
-									buzzctl = 0;
-								}
-								break;
-							case RELAY:
-								if(arg == 1){
-									bcm2835_gpio_fsel(RELAY, BCM2835_GPIO_FSEL_OUTP);
-									bcm2835_gpio_write(RELAY, arg);
-								}else if(arg ==0){
-									bcm2835_gpio_fsel(RELAY, BCM2835_GPIO_FSEL_OUTP);
-									bcm2835_gpio_write(RELAY, arg);
-									
-								}
-								break;
-							
-							default:
-								printf("Invalid Command\n");
-						}
+						bcm2835_gpio_fsel(pin, BCM2835_GPIO_FSEL_OUTP);
+						bcm2835_gpio_write(pin, arg);
+						pi_gpio_state[pin]=arg;
 					}
 				}
 			}					
         }
     }
 	
-#if OLED==1	
-
-	void execute_function(void *argument) {
-        if(argument) {  //fetch the payload of the POST
-            M2MResource::M2MExecuteParameter* param = (M2MResource::M2MExecuteParameter*)argument;
-            String object_name = param->get_argument_object_name();
-            uint16_t object_instance_id = param->get_argument_object_instance_id();
-            String resource_name = param->get_argument_resource_name();
-            int payload_length = param->get_argument_value_length();
-            uint8_t* payload = param->get_argument_value();
-            printf("Resource: %s/%d/%s executed\n", object_name.c_str(), object_instance_id, resource_name.c_str());
-            printf("Payload: %.*s\n", payload_length, payload);
-			sprintf(postOnOLED, "%s/%d/%s:%s", object_name.c_str(), object_instance_id, resource_name.c_str(), payload);
-					
-        }
-    }
-
-#endif
 
 #if BME280==1
 //Here to change the resources
@@ -322,23 +273,21 @@ public:
                                                                  "ResourceTest",
                                                                  M2MResourceInstance::FLOAT,
                                                                  true);
-              res->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-              res->set_execute_function(execute_callback(this,&MbedClient::execute_function));
-                                             
+              res->set_operation(M2MBase::GET_ALLOWED);
+                                                        
               M2MResource* reshp = inst->create_dynamic_resource("Hp",
                                                                "ResourceTest",
                                                                 M2MResourceInstance::FLOAT,
                                                                 true);
 				//set the operation mode of the Objects so that they can handle GET, PUT, POST, DELETE
-               reshp->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-               reshp->set_execute_function(execute_callback(this,&MbedClient::execute_function));
-              
+               reshp->set_operation(M2MBase::GET_ALLOWED);
+        
               M2MResource* resh = inst->create_dynamic_resource("Hum",
                                                                "ResourceTest",
                                                                 M2MResourceInstance::FLOAT,
                                                                 true);
-                  resh->set_operation(M2MBase::GET_PUT_POST_DELETE_ALLOWED);
-                   resh->set_execute_function(execute_callback(this,&MbedClient::execute_function));
+                  resh->set_operation(M2MBase::GET_ALLOWED);
+             
             }
         }
         return success;
@@ -483,7 +432,7 @@ public:
 						earseOLED++;
 					}
 				}
-			}
+			} 
         }
     
 #endif		
@@ -493,13 +442,16 @@ public:
                 M2MResource* gpio_state = inst_gpio_1->resource("STATE");
                 char buffer_state[256];
 				int state_state = 0;
-                         int size_state = sprintf(buffer_state,"{\"GPIO_STATUS\":[{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d}]}",
-													  GPIO_INPUT,bcm2835_gpio_lev(GPIO_INPUT),
-													  BUZZER,buzzctl,
-													  RELAY,bcm2835_gpio_lev(RELAY),
+                         int size_state = sprintf(buffer_state,"{\"GPIO_STATUS\":[{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d},{\"GPIO\":%d,\"value\":%d}]}",
 													  BUTTON1,bcm2835_gpio_lev(BUTTON1),
 													  BUTTON2,bcm2835_gpio_lev(BUTTON2),
-													  LED4,bcm2835_gpio_lev(LED4)
+													  LED1,bcm2835_gpio_lev(LED1),
+													  LED2,bcm2835_gpio_lev(LED2),
+													  BUZZER,buzzctl,
+													  DIP1,bcm2835_gpio_lev(DIP1),
+													  DIP2,bcm2835_gpio_lev(DIP2),
+													  RELAY,bcm2835_gpio_lev(RELAY)
+											
 													  );																				
                   printf("%s\n",buffer_state);
                   gpio_state->set_value((const uint8_t*)buffer_state,
@@ -570,7 +522,7 @@ public:
     // callback function when register successfully
     void object_registered(M2MSecurity * /*security_object*/, const M2MServer &/*server_object*/){
         _registered = true;
-        printf("\nRegistered\n");
+        printf("\nARM mbed Registered successfully\n");
 		clear_LCD();
 		strcpy(postOnOLED, "RegisteringDone");
 		print_Line(3, postOnOLED);
@@ -706,31 +658,30 @@ void* wait_for_unregister(void* arg) {
     return NULL;
 }
 
-
+ 
 
 
 void* buttonobs(void* arg) {
-	MbedClient *client;
-    client = (MbedClient*) arg;
+
 	while(1){
 		sleep(1);
-		if(bcm2835_gpio_lev(BUTTON2) == 0){
-			b23++;
-		}
-		
-		if(bcm2835_gpio_lev(BUTTON1) == 0){  //pressed 
-            bcm2835_gpio_write(RELAY,HIGH); //relay on	
-			bcm2835_gpio_write(LED0,HIGH); 
-		   
-			b24++;
-		} else {
-			 bcm2835_gpio_write(RELAY,LOW); //relay off
-			 bcm2835_gpio_write(LED0,LOW); 
-		}
-			 
-		
-	}
+		if(bcm2835_gpio_lev(BUTTON2) == 0)b23++;
+		if(bcm2835_gpio_lev(BUTTON1) == 0) b24++;
 
+		 printf("%d %d\n\n",bcm2835_gpio_lev(DIP1),bcm2835_gpio_lev(DIP2));
+		
+		//we use set DIP1 off to support remote control
+ 		if(bcm2835_gpio_lev(DIP1)==0) continue;
+
+
+		if(bcm2835_gpio_lev(DIP2)==1){  //on 
+			bcm2835_gpio_write(LED0,HIGH); 
+		    bcm2835_gpio_write(RELAY,HIGH); //relay on	
+		} else {
+			bcm2835_gpio_write(LED0,LOW); 			
+			bcm2835_gpio_write(RELAY,LOW); //relay off 
+		}
+    }
     return NULL;
 }
 
@@ -782,11 +733,13 @@ static void ctrl_c_handle_function(void)
 
 void gpio_init(){
 	
-	bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_INPT);
+	bcm2835_gpio_fsel(BUZZER, BCM2835_GPIO_FSEL_OUTP);
+	bcm2835_gpio_fsel(DIP1, BCM2835_GPIO_FSEL_INPT);
+	bcm2835_gpio_fsel(DIP2, BCM2835_GPIO_FSEL_INPT);
 	bcm2835_gpio_fsel(BUTTON1, BCM2835_GPIO_FSEL_INPT);
 	bcm2835_gpio_fsel(BUTTON2, BCM2835_GPIO_FSEL_INPT);
-	bcm2835_gpio_fsel(LED2, BCM2835_GPIO_FSEL_INPT);  //GPIO26 as a input to know switch state
-	bcm2835_gpio_fsel(LED0, BCM2835_GPIO_FSEL_OUTP); //to know the relay state from mbed cloud
+	bcm2835_gpio_fsel(LED2, BCM2835_GPIO_FSEL_OUTP);  
+	bcm2835_gpio_fsel(LED1, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_fsel(COM, BCM2835_GPIO_FSEL_OUTP);
 	bcm2835_gpio_write(COM, 1);
 
@@ -894,10 +847,10 @@ int main() {
 	strcpy(postOnOLED, "..Registering..");
 	print_Line(3, postOnOLED);
 #endif  
-     printf("rrr\n"); 
+  
     mbed_client.register_endpoint();
 	
-	 printf("qqqqq\n");
+
  
     pthread_create(&button_thread, NULL, &buttonobs, (void*) &mbed_client);
     pthread_create(&observation_thread, NULL, &send_observation, (void*) &mbed_client);
