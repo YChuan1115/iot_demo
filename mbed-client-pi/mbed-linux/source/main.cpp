@@ -165,7 +165,7 @@ public:
     }
 
     bool register_successful() { 
-	 //沒有成功但也沒有錯誤 就先睡1秒再作判斷
+	
         while(!_registered && !_error) {
             sleep(1);
         }
@@ -174,8 +174,9 @@ public:
 
     bool unregister_successful() {
         while(!_unregistered && !_error) {
-            sleep(1);
+           // sleep(1);
         }
+
         return _unregistered;
     }
 
@@ -530,7 +531,7 @@ public:
     // callback function when unregister successfully
     void object_unregistered(M2MSecurity * /*server_object*/){
         _unregistered = true;
-        printf("\nUnregistered\n");
+         printf("\nARM mbed Un-Registered successfully\n");
     }
     // callback function when update registration information successfully
     void registration_updated(M2MSecurity * /*security_object*/, const M2MServer & /*server_object*/){
@@ -644,7 +645,7 @@ void* wait_for_unregister(void* arg) {
     client = (MbedClient*) arg;
     if(client->unregister_successful()) {
         printf("Unregistered done\n");
-        loop = false;
+       
         pthread_detach(update_register_thread);
         pthread_detach(observation_thread);
         pthread_detach(unregister_thread);
@@ -654,6 +655,7 @@ void* wait_for_unregister(void* arg) {
         pthread_cancel(observation_thread);
         pthread_cancel(unregister_thread);
 		pthread_cancel(button_thread);
+		loop = false;
     }
     return NULL;
 }
@@ -668,7 +670,7 @@ void* buttonobs(void* arg) {
 		if(bcm2835_gpio_lev(BUTTON2) == 0)b23++;
 		if(bcm2835_gpio_lev(BUTTON1) == 0) b24++;
 
-		 printf("%d %d\n\n",bcm2835_gpio_lev(DIP1),bcm2835_gpio_lev(DIP2));
+		// printf("%d %d\n\n",bcm2835_gpio_lev(DIP1),bcm2835_gpio_lev(DIP2));
 		
 		//we use set DIP1 off to support remote control
  		if(bcm2835_gpio_lev(DIP1)==0) continue;
@@ -723,11 +725,10 @@ static void ctrl_c_handle_function(void)
 {
     if(mbedclient && mbedclient->register_successful()) {
 		ctlC = true;
-		sleep(1);
-        printf("\nUnregistering endpoint and EXITING Program\n");
+		printf("\nUnregistering endpoint and EXITING Program\n");
         mbedclient->mbedClient_unregister();
-   }
-	  loop = false;
+	  }
+	 		 loop = false;
 }
 
 
